@@ -1,0 +1,32 @@
+
+version: '3'
+
+services:
+  web:
+    restart: always
+    build: .
+    volumes:
+       - .:/docker_container
+    ports:
+       - 8000:8000
+    command: python mysite/manage.py runserver 0.0.0.0:8000
+
+
+  nginx:
+    restart: always
+    build: ./nginx/
+    ports:
+      - "80:80"
+    volumes:
+      - ./mysite/home_page/static:/static
+    depends_on:
+      - web
+
+  redis:
+    restart: always
+    image: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - ../mysite/redis:/mysite
+    entrypoint: redis-server --appendonly yes

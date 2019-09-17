@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Summary</title>
+   <link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}">
+</head>
+<body>
+A:{{existing_order}}
+B: {{ existing_order.get_cart_items }}
+
+  {% for x in one_order %}
+        <h3>{{ x.ref_code }}</h3>
+        <h3>{{ x.username }}</h3>
+        {% for x in existing_order.get_cart_items %}
+        {{x}}
+        {% endfor %}
+        <h3> Total: $ {{ order_total }} </h3>
+        <!-- <h3>{{ x.date_ordered }}</h3> -->
+        <!-- <h3>{{ x.is_ordered }}</h3> -->
+  {% endfor %}
+
+  <a href="/checkout" class="btn btn-success">Checkout</a>
+
+
+  {% for z in my_items %}
+  <h3>{{ z.product.name }}</h3>
+  <h3>{{ z.product.price }} x {{ z.product.quantity }}</h3>
+
+  <form method="POST" action="/shopping_cart/removed/{{ z.product.id }}/">
+      {% csrf_token %}
+      <button type="submit" onclick="popup2()"><a class="alert button">Delete</a></button>
+  </form>
+  {% endfor %}
+
+</body>
+<script>
+function popup2() {
+  alert("item removed");
+}
+</script>
+</html>
+{% endblock %}

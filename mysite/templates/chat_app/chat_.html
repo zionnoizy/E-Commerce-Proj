@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Chat Room</title>
+</head>
+<body>
+    <textarea id="chat-log" cols="100" rows="20"></textarea> <br/>
+    <input id="chat_room_i" type="text" size="100"/ placeorder="Type you msg here"> <br/>
+    <input id="chat-message-submit" type="button" value="Send"/>
+</body>
+
+<script>
+    var loc = window.location
+    var roomName = {{ room_name }};
+    var wsStart = 'ws://'
+    var my_form_data = ("#my_form")
+    var msgInput = ("#chat-message-input")
+    var chatSocket = new WebSocket(
+        wsStart + window.location.host + '/ws/chat/' + roomName + '/');
+
+
+    chatSocket.onmessage = function(e) {
+        var data = JSON.parse(e.data);
+        var message = data['message'];
+        var now_time = data['now_time'];
+        var receive_user = data['user'];
+
+        // document.querySelector('#chat-log').value += ( data.username + ": " + message + " " + now_time + '\n');
+         document.querySelector('#chat-log').value += (message + " //" + now_time +'\n');
+        console.log('message, '+ message)
+    };
+
+    chatSocket.onclose = function(e) {
+        console.error('Chat socket closed unexpectedly');
+        console.log('close,')
+    };
+    // conn.onmessage = function(e){ console.log(e.data); };
+    // chatSocket.onopen = () => chatSocket.send('hello');
+    chatSocket.onopen = function(e) {
+      console.log("open,", e)
+    //     event.preventDefault()
+        // var msgText = $("#chat_room_i").val()
+        // console.log("open,", msgText)
+    //     // var serialized = formData.serialize()
+    //     var finalData = {
+    //       'message': msgText
+    //     }
+        // chatSocket.send(JSON.stringify("HW"))
+    //     console.log('send:', msgText)
+    //     // formData[0].reset()
+    }
+
+    chatSocket.onerror = function(e) {
+      console.log("error,", e)
+    }
+
+    document.querySelector('#chat_room_i').focus();
+    document.querySelector('#chat_room_i').onkeyup = function(e) {
+        if (e.keyCode === 13) {  // enter, return
+            document.querySelector('#chat-message-submit').click();
+        }
+    };
+    // $(#"chat_room_i").focus()
+
+    // $(#"chat_room_i").keyup(function(e) {
+    //   if (e.keyCode === 13) {
+    //     $(#"chat_room_i"),click()
+    //   }
+    // });
+
+
+
+    // $(#"chat_room_i").click(function() {
+    //   var msg = $(#"chat_room_i").val();
+    //     chatSocket.send(JSON.stringify({
+    //       'msg':msg
+    //     }))
+    //     $(#"chat_room_i").val('');
+    //   });
+
+    document.querySelector('#chat-message-submit').onclick = function(e) {
+        var messageInputDom = document.querySelector('#chat_room_i');
+        var message = messageInputDom.value;
+        chatSocket.send(JSON.stringify({
+            'message': message
+        }));
+        console.log('send:')
+        messageInputDom.value = '';
+    };
+</script>
+
+</html>
+{% endblock %}

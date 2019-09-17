@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>homepage</title>
+  <link rel="stylesheet" href="{% static "css/home_page/home_page.css" %}">
+</head>
+<body>
+
+
+  <div class="grid-x grid-margin-x small-up-2 medium-up-3 large-up-4">
+  {% for items in all_products %}
+  <div class="cell">
+    <a href="{{ items.get_absolute_url }}">
+  {% if items.image %}
+  <img class="thumbnail" src="{{items.image.url}}">
+  {% endif %}
+    </a>
+  <h5>{{ items.name }}  ${{ items.price }}</h5>
+  </div>
+  {% endfor %}
+
+  <div class="cell">
+  <img class="thumbnail" src="https://placehold.it/550x550">
+  <h5>Nothing</h5>
+  </div>
+
+  </div>
+
+
+<div class="row">
+    <div class="col-md-3">
+        <h3>Category</h3>
+        <ul class="nav nav-pills nav-stacked">
+            <li>
+
+                <a>All</a></li>
+            {% for x in all_catrgories %}
+                <li>
+                    <form method="GET" action="">
+                    {% csrf_token %}
+                    <a href="{{ x.get_absolute_url }}/sort/{{ x.what_category }}">{{ x.what_category }}</a>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+<!-- <form method="GET" action="">
+    {% csrf_token %}
+    <input type="text" name="q">
+    <input type="submit" value="Search">
+    {% if results|length > 0 %}
+        {{ y }} {{ msg }}
+    {% else %}
+        was not found
+    {% endif %}
+</form> -->
+
+</body>
+</html>
+{% endblock %}

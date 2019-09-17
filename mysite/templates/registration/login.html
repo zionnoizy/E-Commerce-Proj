@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<h2>Login<h2>
+  <h3>
+  {% if not self.user.is_authenticated %}
+    Login to access shopping cart, checkout, and chat room feature.
+  {% endif %}
+  </h3>
+
+
+
+
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit" class="button expanded" >Login</button>
+</form>
+
+username:hinwunwong pw:212321
+<a href="/accounts/register" class="btn btn-success">Register</a>
+
+{% endblock %}

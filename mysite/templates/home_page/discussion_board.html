@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+
+{% for x in conversation %}
+<div class="large-4 medium-4 small-12 cell">
+<li>{{ x.conversation }}</li>
+</div>
+{% endfor %}
+
+<form id="my_form" method="POST" action="">
+    {% csrf_token %}
+    {{ my_form }}
+    <input type="submit" value="send">
+</form>
+
+<div id="app">
+  {% verbatim %}
+  {{ message }}
+  {% endverbatim %}
+</div>
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="{% static "chat/my_vue.js" %}"></script>
+{% endblock %}
+
+
+{% endblock %}

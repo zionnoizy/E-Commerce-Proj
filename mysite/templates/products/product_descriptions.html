@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{{ single_item.name }}</title>
+  <link rel="stylesheet" href="{% static "css/products/product_descriptions.css" %}">
+</head>
+<body>
+
+  <div class="grid-x">
+    <div class="cell small-6">
+      <p style="border-width:4px; border-style:solid;">
+      <img src="{{single_item.image.url}}" alt="" height="520" width="520">
+      </p>
+    </div>
+
+
+    <div class="cell small-6">
+      <h1>{{ single_item.name }}</h1>
+      <white>product id: {{ product_id }}</white>
+      <h2>${{single_item.price }}</h2>
+      <h3>stock: {{ single_item.stock }}</h3>
+      <h3>available: {{ single_item.available }}</h3>
+      <h3>upload date: {{ single_item.pdated }}</h3>
+      <h3>description: {{ single_item.description }}</h3>
+    </div>
+  </div>
+
+
+  <form method="POST" action="/shopping_cart/added/{{ product_id }}/">
+      {% csrf_token %}
+      <button type="submit" class="button" onclick="popup()"> Add {{ single_item.name }} to chat </button>
+  </form>
+
+  <!-- product description here -->
+   <!-- <div class = "multi">
+   <p style="border-width:4px; border-style:solid;">
+   <img src="{{single_item.image.url}}" alt="" height="520" width="520">
+   </p>
+   <h1>{{ single_item.name }}</h1>
+   <white>product_id: {{ product_id }}</white>
+   <h2>{{single_item.price }}</h2>
+   <h3>stock: {{ single_item.stock }}</h3>
+   <h3>available: {{ single_item.available }}</h3>
+   <h3>upload date: {{ single_item.pdated }}</h3>
+   <h3>description: {{ single_item.description }}</h3>
+
+
+
+   <form method="POST" action="/shopping_cart/added/{{ product_id }}/">
+       {% csrf_token %}
+       <button type="submit" class="button" onclick="popup()"> Add {{ single_item.name }} to chat </button>
+   </form> -->
+
+</body>
+<script>
+function popup() {
+  if ({{ single_item.stock }}<=0)
+  alert("item is out of stock")
+  window.location.replace("/");
+  else
+  alert("item added");
+}
+</script>
+</html>
+{% endblock %}
